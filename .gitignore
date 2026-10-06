@@ -1,0 +1,32 @@
+.runtime/
+frontend/node_modules/
+frontend/dist/
+data/
+__pycache__/
+.pytest_cache/
+*.pyc
+.env
+tmp/
+**/node_modules/
+.venv/
+.env.*
+!.env.example
+!.env.*.example
+*.log
+*.db
+*.db-shm
+*.db-wal
+*.sqlite*
+.netlify/
+reports/qa/
+reports/*.zip
+reports/snapshot-*.json
+ABRIR APP.lnk
+.DS_Store
+Thumbs.db
+
+# Project documents remain local; this repository is public.
+Desenhos/
+reports/
+analise-tecnica.md
+VALIDACAO.md

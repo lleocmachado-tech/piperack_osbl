@@ -1,0 +1,1 @@
+{"name":"combio-processing-tools","private":true,"type":"module","dependencies":{"tesseract.js":"7.0.0","playwright":"^1.58.2"}}

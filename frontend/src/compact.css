@@ -1,0 +1,26 @@
+/* Keep the project chrome small and reserve the window for the drawing. */
+.field-header.drawing-header{height:40px;min-height:40px;padding:4px 12px;gap:12px;flex-direction:row;flex-wrap:nowrap;align-items:center}
+.drawing-header .identity{gap:14px;flex-wrap:nowrap}
+.drawing-header .identity>div{display:flex;align-items:baseline;gap:10px}
+.drawing-header .identity .brand{font-size:16px;letter-spacing:1px}
+.drawing-header .identity h1{font-size:13px;white-space:nowrap}
+.drawing-header .identity small{font-size:10px;white-space:nowrap}
+.drawing-header .header-actions{width:auto;flex-wrap:nowrap}
+.drawing-header .header-button{min-height:28px;padding:4px 9px;font-size:10px}
+.field-workspace:not(.is-expanded){height:calc(100dvh - 40px);padding:5px 8px 8px;min-height:440px}
+.field-topline{gap:14px;min-height:32px;margin-bottom:5px;flex-wrap:nowrap}
+.drawing-picker{gap:7px}.drawing-picker label{font-size:11px}.drawing-picker select{min-height:30px;min-width:190px;padding:4px 8px;font-size:12px}
+.field-topline>button{min-height:30px;padding:4px 10px;font-size:11px}
+.field-summary{flex-direction:row;align-items:center;gap:10px;min-width:0;max-width:none;width:auto;order:0;flex-wrap:nowrap}
+.field-summary>span{font-size:11px;white-space:nowrap}.field-summary strong{font-size:15px;margin-left:5px}.field-summary small{font-size:10px;white-space:nowrap;width:auto}
+.field-toolbar{padding:4px 6px;gap:6px}.field-toolbar .tool-group{gap:4px}
+.field-toolbar button,.field-toolbar select{min-height:30px;padding:4px 8px;font-size:11px}
+.pdf-zoom-controls{padding:2px 4px;gap:4px}.pdf-zoom-controls>span{font-size:11px}
+.pdf-zoom-controls select{min-height:28px;width:136px}.pdf-zoom-controls .zoom-step{min-height:28px;width:28px;font-size:19px}.pdf-zoom-controls .fit-page{min-height:28px}
+.field-drawing .canvas-status{min-height:22px;padding:3px 10px;font-size:10px}
+.field-legend{padding:5px 10px;font-size:10px}
+.app-kpis{gap:8px;padding:8px 16px}
+.app-kpis>div{display:grid;grid-template-columns:1fr auto;align-items:center;gap:0 8px;border-top-width:2px;padding:6px 10px;box-shadow:none}
+.app-kpis label{font-size:10px;letter-spacing:0;text-transform:none}.app-kpis strong{font-size:18px;padding:0}.app-kpis small{font-size:10px;grid-column:1/-1;line-height:1.4}
+@media(max-width:850px){.field-summary{gap:5px}.field-summary small{display:none}.drawing-header .identity>div{gap:6px}.field-toolbar .drawing-options{margin-left:auto}}
+@media(max-width:500px){.field-header.drawing-header{padding:4px 8px;gap:6px}.drawing-header .identity{gap:8px}.drawing-header .identity>div>small{display:none}.drawing-header .identity .brand{font-size:14px}.drawing-header .identity h1{font-size:11px}.drawing-header .header-button{font-size:9px;padding:4px 6px}.field-workspace:not(.is-expanded){padding:4px;height:calc(100dvh - 40px)}.field-topline{gap:6px;flex-wrap:wrap;margin-bottom:4px}.drawing-picker select{min-width:0;width:162px;font-size:11px}.drawing-picker label{display:none}.field-topline>button{font-size:10px;padding:4px 7px}.field-summary>span{font-size:10px}.field-summary strong{font-size:13px;margin-left:3px}.field-summary{margin-right:auto}.pdf-zoom-controls{padding:2px;gap:3px}.pdf-zoom-controls select{width:118px}.field-toolbar button,.field-toolbar select{min-height:32px}.field-toolbar .drawing-options{gap:4px}.field-toolbar .drawing-options button{flex:1}.field-drawing .canvas-status{font-size:9px;min-height:20px}.app-kpis{padding:6px 10px;gap:6px}.app-kpis>div{padding:5px 8px}.app-kpis strong{font-size:16px}}
