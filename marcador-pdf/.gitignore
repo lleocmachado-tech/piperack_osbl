@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+# PDFs da obra ficam fora do repositório público.
+public/dev/

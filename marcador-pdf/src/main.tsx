@@ -1,0 +1,31 @@
+import {useEffect,useState} from 'react';
+import {createRoot} from 'react-dom/client';
+import {demo,session} from './store';
+import Editor from './Editor';
+import Library from './Library';
+import './style.css';
+
+// Rotas pelo hash, para o endereço de um arquivo poder ser compartilhado: #/f/<arquivo> e #/p/<pasta>.
+const go=(hash:string)=>{location.hash=hash};
+
+function Login({onDone}:{onDone:()=>void}){
+ const [password,setPassword]=useState(''),[msg,setMsg]=useState(''),[busy,setBusy]=useState(false);
+ return <form className="login" onSubmit={e=>{e.preventDefault();setBusy(true);setMsg('');session.login(password).then(onDone,e=>{setMsg(e.message);setBusy(false)})}}>
+  <h1>Marcador de avanço</h1>
+  <input type="password" required autoFocus placeholder="Senha da equipe" value={password} onChange={e=>setPassword(e.target.value)}/>
+  <button disabled={busy}>Entrar</button>{msg&&<p className="err">{msg}</p>}
+ </form>;
+}
+
+function Root(){
+ const [authed,setAuthed]=useState(()=>session.restore()),[hash,setHash]=useState(location.hash);
+ useEffect(()=>{const h=()=>setHash(location.hash);addEventListener('hashchange',h);return()=>removeEventListener('hashchange',h)},[]);
+ const file=hash.match(/^#\/f\/([\w-]+)$/)?.[1],folder=hash.match(/^#\/p\/([\w-]+)$/)?.[1]??null;
+ return <>
+  {authed&&demo&&<div className="demo">Modo de teste: o servidor não respondeu, então nada é guardado ao recarregar a página.</div>}
+  {!authed?<Login onDone={()=>setAuthed(true)}/>
+   :file?<Editor key={file} fileId={file} onBack={f=>go(f?'#/p/'+f:'#/')}/>
+   :<Library folderId={folder} onOpen={id=>go('#/f/'+id)} onFolder={id=>go(id?'#/p/'+id:'#/')} onSignOut={()=>{session.logout();setAuthed(false)}}/>}
+ </>;
+}
+createRoot(document.getElementById('root')!).render(<Root/>);

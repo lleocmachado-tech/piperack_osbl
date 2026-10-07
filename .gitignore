@@ -30,3 +30,7 @@ Desenhos/
 reports/
 analise-tecnica.md
 VALIDACAO.md
+
+
+# Cópia local do app de arquivo único (gerada por npm run build em marcador-pdf)
+Marcador.html
