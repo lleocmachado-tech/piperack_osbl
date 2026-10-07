@@ -72,7 +72,8 @@ function supabase(url:string,key:string):Backend{
     if(data!.length<1000)return all;
    }
   },
-  async addMarks(list){for(const c of chunks(list,500))fail((await sb.from(T.marks).insert(c)).error)},
+  // upsert: repetir o envio depois de uma falha de rede não duplica
+  async addMarks(list){for(const c of chunks(list,500))fail((await sb.from(T.marks).upsert(c,{onConflict:'id',ignoreDuplicates:true})).error)},
   async removeMarks(ids){for(const c of chunks(ids,100))fail((await sb.from(T.marks).delete().in('id',c)).error)},
   watch(fileId,w){
    const ch=sb.channel('marcador-file-'+fileId)

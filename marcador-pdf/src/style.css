@@ -1,43 +1,115 @@
-*{box-sizing:border-box}
-body{margin:0;font:14px system-ui,sans-serif;background:#444;color:#222}
-.app{display:flex;flex-direction:column;height:100dvh}
-.bar{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;padding:8px 12px;background:#f5f5f5;border-bottom:1px solid #ccc}
-.group{display:inline-flex;gap:6px;align-items:center}
-button,.btn,select{font:inherit;padding:6px 10px;border:1px solid #aaa;border-radius:6px;background:#fff;cursor:pointer}
+/* Padrão visual COMBIO: verde da marca, Kodchasan nos títulos e Open Sans no texto. */
+:root{
+ --combio:#1A6B35;--combio-escuro:#12512A;--combio-claro:#E8F3EC;
+ --fundo:#F5F7F4;--superficie:#fff;--borda:#D9E3DC;--texto:#333;--texto-sec:#6B7B70;--erro:#E74C3C;--atencao:#F39C12;
+ --fonte-titulo:'Kodchasan',sans-serif;--fonte-corpo:'Open Sans',sans-serif;
+ --raio:8px;--sombra:0 2px 8px rgba(0,0,0,.08);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{overscroll-behavior:none}
+body{margin:0;font:14px/1.5 var(--fonte-corpo);background:var(--fundo);color:var(--texto);touch-action:manipulation}
+#root{display:flex;flex-direction:column;height:100dvh}
+.app{display:flex;flex-direction:column;flex:1;min-height:0}
+button,.btn,select{font:inherit;min-height:38px;padding:6px 12px;border:1px solid var(--borda);border-radius:var(--raio);background:var(--superficie);color:var(--texto);cursor:pointer}
+button:hover:not(:disabled){border-color:var(--combio)}
 button:disabled{opacity:.45;cursor:default}
-button.on{background:#222;color:#fff;border-color:#222}
-.primary{background:#2E7D32;color:#fff;border-color:#2E7D32}
-.sw{width:30px;height:30px;padding:0;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px #888}
-.sw.on{box-shadow:0 0 0 3px #222}
-.scroll{flex:1;overflow:auto}
-.sheet{position:relative;width:fit-content;margin:12px auto;background:#fff;box-shadow:0 2px 12px #0008}
+button.on{background:var(--combio);color:#fff;border-color:var(--combio)}
+.primary{background:var(--combio);color:#fff;border-color:var(--combio)}
+.primary:hover:not(:disabled){background:var(--combio-escuro);border-color:var(--combio-escuro)}
+small{color:var(--texto-sec)}
+
+/* Cabeçalho verde (editor e biblioteca) */
+.bar{display:flex;align-items:center;gap:8px 12px;padding:8px 14px;background:var(--combio);color:#fff;box-shadow:var(--sombra);order:1;z-index:3}
+.bar button{background:transparent;color:#fff;border-color:rgba(255,255,255,.45)}
+.bar button:hover:not(:disabled){background:rgba(255,255,255,.14);border-color:#fff}
+.bar .primary{background:#fff;color:var(--combio);border-color:#fff}
+.bar .primary:hover:not(:disabled){background:var(--combio-claro)}
+.logo{height:26px;width:auto;display:block}
+.title{font:600 16px var(--fonte-titulo);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.group{display:inline-flex;gap:6px;align-items:center}
+.m{display:none}
+
+/* Faixa de ferramentas (embaixo no celular) */
+.dock{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding:8px 14px;background:var(--superficie);border-bottom:1px solid var(--borda);order:2}
+.tools{order:1;display:flex;gap:6px;align-items:center}
+.colors{order:2;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.tool{display:inline-flex;gap:6px;align-items:center;justify-content:center}
+.picker input{width:38px;height:34px;padding:0;border:1px solid var(--borda);border-radius:var(--raio);background:#fff;cursor:pointer;display:block}
+.sw{width:30px;height:30px;min-height:0;padding:0;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px #8a968d}
+.sw.on{box-shadow:0 0 0 3px var(--combio)}
+.cur{max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hint{order:3;flex-basis:100%}
+
+.legend{order:3;display:grid;gap:6px;padding:10px 14px;background:var(--combio-claro);border-bottom:1px solid var(--borda);max-height:40vh;overflow:auto}
+.legend .entry{display:flex;gap:8px;align-items:center}
+.legend input{flex:1;max-width:360px;font:inherit;padding:6px 8px;border:1px solid var(--borda);border-radius:var(--raio)}
+.legend button:last-of-type{justify-self:start}
+
+/* Página do desenho */
+.scroll{order:4;flex:1;overflow:auto;background:#E9EEEB;touch-action:none;position:relative}
+.sheet{position:relative;width:fit-content;margin:12px auto;background:#fff;box-shadow:0 2px 12px #263e3030;will-change:transform}
 .sheet canvas{display:block}
 .sheet svg{position:absolute;left:0;top:0}
-.msg{position:fixed;left:12px;right:12px;bottom:12px;z-index:5;display:flex;justify-content:space-between;gap:12px;padding:10px 12px;border-radius:6px;background:#fde8e8;color:#8a1c1c;box-shadow:0 2px 8px #0006}
-.msg button{border:0;background:none}
-.center{color:#ddd;text-align:center;margin:40px 16px}
-.login{max-width:320px;margin:15vh auto;padding:0 16px;display:grid;gap:12px;color:#eee}
-.login input{font:inherit;padding:10px;border-radius:6px;border:1px solid #aaa}
-.err{color:#f99}
-@media (max-width:640px){.bar{gap:6px 8px;padding:6px 8px}}
-.hint{flex-basis:100%;color:#555}
-.picker{display:inline-flex;gap:6px;align-items:center}
-.picker input{width:38px;height:30px;padding:0;border:1px solid #aaa;border-radius:6px;background:#fff;cursor:pointer}
-.legend{display:grid;gap:6px;padding:8px 12px;background:#fafafa;border-bottom:1px solid #ccc;max-height:40vh;overflow:auto}
-.legend .entry{display:flex;gap:8px;align-items:center}
-.legend input{flex:1;max-width:360px;font:inherit;padding:6px 8px;border:1px solid #aaa;border-radius:6px}
-.legend button:last-of-type{justify-self:start}
-.title{font-size:15px}
-.demo{background:#fff3cd;color:#664d03;padding:6px 12px;font-size:13px}
-.lib{min-height:100dvh;background:#eee}
-.list{max-width:760px;margin:16px auto;padding:0 12px;display:grid;gap:8px}
+.scroll.grab,.scroll.grab *{cursor:grab}
+.scroll.grab:active,.scroll.grab:active *{cursor:grabbing}
+.chip{position:fixed;left:14px;top:120px;z-index:2;padding:4px 12px;border-radius:99px;background:var(--combio);color:#fff;font-size:12px;box-shadow:var(--sombra)}
+.tip{position:fixed;left:50%;transform:translateX(-50%);top:64px;z-index:4;padding:8px 14px;border-radius:99px;background:#263e30e8;color:#fff;font-size:13px;white-space:nowrap}
+.offline{background:var(--atencao);color:#3d2a00;padding:6px 14px;font-size:13px;order:1}
+
+.msg{position:fixed;left:12px;right:12px;bottom:12px;z-index:20;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 12px;border-radius:var(--raio);background:#fde8e8;color:#8a1c1c;box-shadow:0 2px 8px #0006}
+.msg button{border:0;background:none;color:inherit}
+.center{color:var(--texto-sec);text-align:center;margin:40px 16px}
+.demo{background:#fff3cd;color:#664d03;padding:6px 14px;font-size:13px}
+
+/* Entrada */
+.login{max-width:340px;margin:12vh auto 0;padding:24px 20px;display:grid;gap:14px;background:var(--superficie);border-radius:var(--raio);box-shadow:var(--sombra);border-top:4px solid var(--combio)}
+.login img{height:40px;width:auto;justify-self:start}
+.login h1{font:700 22px var(--fonte-titulo);margin:0;color:var(--combio)}
+.login input{font:inherit;font-size:16px;padding:10px;border-radius:var(--raio);border:1px solid var(--borda)}
+.err{color:var(--erro);margin:0}
+
+/* Biblioteca */
+.lib{flex:1;min-height:0;overflow:auto;background:var(--fundo)}
+.lib .bar{position:sticky;top:0}
+.list{max-width:760px;margin:16px auto;padding:0 14px;display:grid;gap:8px}
+.actions-top{display:flex;gap:8px;flex-wrap:wrap}
 .crumbs{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.item{display:flex;gap:8px;align-items:center;background:#fff;border:1px solid #ccc;border-radius:8px;padding:6px 8px}
-.item .name{flex:1;text-align:left;border:0;background:none;font-size:15px}
-.empty{color:#666;text-align:center;margin:32px 0}
+.item{display:flex;gap:8px;align-items:center;background:var(--superficie);border:1px solid var(--borda);border-radius:var(--raio);padding:6px 8px;box-shadow:var(--sombra)}
+.item .name{flex:1;text-align:left;border:0;background:none;font-size:15px;min-height:44px}
+.empty{color:var(--texto-sec);text-align:center;margin:32px 0}
 .backdrop{position:fixed;inset:0;background:#0007;display:grid;place-items:center;z-index:10}
-.modal{background:#fff;border-radius:10px;padding:16px;display:grid;gap:12px;width:min(420px,92vw)}
-.modal h2{margin:0}
+.modal{background:#fff;border-radius:var(--raio);padding:18px;display:grid;gap:12px;width:min(420px,92vw)}
+.modal h2{margin:0;font:600 19px var(--fonte-titulo);border-left:4px solid var(--combio);padding-left:12px}
 .modal label{display:grid;gap:4px}
-.modal input:not([type=file]),.modal select{font:inherit;padding:8px;border:1px solid #aaa;border-radius:6px}
+.modal input:not([type=file]),.modal select{font:inherit;font-size:16px;padding:8px;border:1px solid var(--borda);border-radius:var(--raio)}
 .actions{display:flex;gap:8px;justify-content:flex-end}
+
+/* Celular: cabeçalho enxuto, ferramentas grandes embaixo, zoom flutuante */
+@media (max-width:720px),(pointer:coarse) and (max-width:900px){
+ .d{display:none}.m{display:inline}
+ .bar{padding:6px 10px;gap:6px}
+ .bar .logo{height:22px}
+ .lib .bar .title{font-size:15px}
+ .app .bar .logo{display:none}
+ .bar button{min-width:44px;min-height:44px}
+ .dock{order:6;border-bottom:0;border-top:1px solid var(--borda);padding:6px 8px calc(6px + env(safe-area-inset-bottom));gap:6px;box-shadow:0 -2px 8px rgba(0,0,0,.08)}
+ .colors{order:1;flex-basis:100%;flex-wrap:nowrap;overflow-x:auto;gap:10px;padding:2px 2px 4px}
+ .colors>*{flex-shrink:0}
+ .tools{order:2;flex-basis:100%}
+ .tools button{flex:1;min-height:54px;padding:4px 2px;font-size:11px;flex-direction:column;gap:0}
+ .tools .ico{font-size:20px;line-height:1.2}
+ .sw{width:36px;height:36px}
+ .legend{order:5;max-height:45vh;border-top:1px solid var(--borda);border-bottom:0}
+ .legend input{font-size:16px;max-width:none}
+ .app .zoom{position:fixed;right:10px;top:70px;z-index:5;flex-direction:column;gap:8px}
+ .app .zoom button{background:var(--superficie);color:var(--combio);border:1px solid var(--borda);box-shadow:var(--sombra);width:46px;height:46px;padding:0;font-size:22px;border-radius:50%}
+ .msg{bottom:auto;top:62px}
+ .tip{top:auto;bottom:150px}
+ .chip{top:66px}
+ .item{flex-wrap:wrap}
+ .item .name{flex-basis:100%}
+ .item select{flex:1;min-width:0}
+ .item button,.item select,.actions-top button,.crumbs button{min-height:44px}
+ .actions-top button{flex:1}
+ .modal{width:94vw}
+}

@@ -1,5 +1,6 @@
 import {useEffect,useState} from 'react';
 import {backend,FileRow,Folder} from './store';
+import logo from './assets/combio-branco.png';
 
 // Pastas de um nível (ex.: "TR01" com os desenhos dentro) e arquivos soltos na raiz.
 export default function Library({folderId,onOpen,onFolder,onSignOut}:{folderId:string|null;onOpen:(id:string)=>void;onFolder:(id:string|null)=>void;onSignOut:()=>void}){
@@ -26,14 +27,17 @@ export default function Library({folderId,onOpen,onFolder,onSignOut}:{folderId:s
  }
 
  return <div className="lib">
-  <div className="bar">
+  <header className="bar">
+   <img className="logo" src={logo} alt="COMBIO"/>
    <b className="title">Marcador de avanço</b>
-   <button className="primary" onClick={()=>{setForm({name:'',folder:folderId||'',pdfName:'',pdf:null});setCreating(true)}}>+ Novo arquivo</button>
-   {!folderId&&<button onClick={()=>{const n=ask('Nome da pasta (ex.: TR01)');if(n)void run(()=>backend.createFolder(n))}}>+ Nova pasta</button>}
    <button onClick={onSignOut}>Sair</button>
-  </div>
+  </header>
   {msg&&<div className="msg" role="alert">{msg}<button onClick={()=>setMsg('')}>×</button></div>}
   <div className="list">
+   <div className="actions-top">
+    <button className="primary" onClick={()=>{setForm({name:'',folder:folderId||'',pdfName:'',pdf:null});setCreating(true)}}>+ Novo arquivo</button>
+    {!folderId&&<button onClick={()=>{const n=ask('Nome da pasta (ex.: TR01)');if(n)void run(()=>backend.createFolder(n))}}>+ Nova pasta</button>}
+   </div>
    <nav className="crumbs"><button onClick={()=>onFolder(null)} disabled={!folderId}>Todos os arquivos</button>{folder&&<> / <b>{folder.name}</b>
     <button onClick={()=>{const n=ask('Novo nome da pasta',folder.name);if(n)void run(()=>backend.renameFolder(folder.id,n))}}>Renomear</button>
     <button disabled={!!files.length} title={files.length?'Esvazie a pasta para excluir':''} onClick={()=>{if(confirm(`Excluir a pasta "${folder.name}"?`))void run(()=>backend.deleteFolder(folder.id).then(()=>onFolder(null)))}}>Excluir pasta</button></>}</nav>

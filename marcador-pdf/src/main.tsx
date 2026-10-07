@@ -3,6 +3,8 @@ import {createRoot} from 'react-dom/client';
 import {demo,session} from './store';
 import Editor from './Editor';
 import Library from './Library';
+import logo from './assets/combio-verde.png';
+import './fonts.css';
 import './style.css';
 
 // Rotas pelo hash, para o endereço de um arquivo poder ser compartilhado: #/f/<arquivo> e #/p/<pasta>.
@@ -11,6 +13,7 @@ const go=(hash:string)=>{location.hash=hash};
 function Login({onDone}:{onDone:()=>void}){
  const [password,setPassword]=useState(''),[msg,setMsg]=useState(''),[busy,setBusy]=useState(false);
  return <form className="login" onSubmit={e=>{e.preventDefault();setBusy(true);setMsg('');session.login(password).then(onDone,e=>{setMsg(e.message);setBusy(false)})}}>
+  <img src={logo} alt="COMBIO"/>
   <h1>Marcador de avanço</h1>
   <input type="password" required autoFocus placeholder="Senha da equipe" value={password} onChange={e=>setPassword(e.target.value)}/>
   <button disabled={busy}>Entrar</button>{msg&&<p className="err">{msg}</p>}
