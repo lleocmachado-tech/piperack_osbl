@@ -1,0 +1,22 @@
+# O app está em marcador-pdf/. Estas linhas valem mais que a tela do Netlify, então o site funciona
+# mesmo que "Base directory" e "Build command" estejam em branco ou com o valor antigo.
+[build]
+  base = "marcador-pdf"
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Cadastre no Netlify (Site configuration > Environment variables), senão o app abre em modo de teste:
+#   VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY  (os mesmos do marcador-pdf/.env)
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "no-cache"

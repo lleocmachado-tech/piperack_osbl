@@ -53,10 +53,8 @@ npm run build          # gera dist/index.html (arquivo único, abre com duplo cl
 
 Depois do build, `dist/index.html` funciona aberto do disco. O projeto mantém uma cópia na raiz, `Marcador.html` (fora do Git).
 
-### Publicar (opcional)
-É um site estático: o `netlify.toml` desta pasta já define o build (**Base directory** = `marcador-pdf`). Cadastre `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` como variáveis do site, porque o build precisa delas.
-
-O teste das peças usa os PDFs de `../Desenhos/` (ou `public/dev/`); sem eles, é pulado.
+### Publicar no Netlify
+O `netlify.toml` da **raiz do repositório** já aponta para esta pasta (`base = "marcador-pdf"`, build `npm run build`, publicação em `dist`), e vale mais que a tela do Netlify. Só falta cadastrar, em *Site configuration → Environment variables*, `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` (os mesmos do `.env`): o build precisa deles, e sem eles o site abre em modo de teste (memória, nada é gravado).
 
 ## Estrutura
 
