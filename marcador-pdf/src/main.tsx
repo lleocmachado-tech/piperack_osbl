@@ -22,7 +22,7 @@ function Root(){
  useEffect(()=>{const h=()=>setHash(location.hash);addEventListener('hashchange',h);return()=>removeEventListener('hashchange',h)},[]);
  const file=hash.match(/^#\/f\/([\w-]+)$/)?.[1],folder=hash.match(/^#\/p\/([\w-]+)$/)?.[1]??null;
  return <>
-  {authed&&demo&&<div className="demo">Modo de teste: o servidor não respondeu, então nada é guardado ao recarregar a página.</div>}
+  {authed&&demo&&<div className="demo">Modo de teste: esta versão foi gerada sem a URL e a chave do Supabase (VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY), então nada é salvo online nem aparece para os outros, e tudo se perde ao recarregar.</div>}
   {!authed?<Login onDone={()=>setAuthed(true)}/>
    :file?<Editor key={file} fileId={file} onBack={f=>go(f?'#/p/'+f:'#/')}/>
    :<Library folderId={folder} onOpen={id=>go('#/f/'+id)} onFolder={id=>go(id?'#/p/'+id:'#/')} onSignOut={()=>{session.logout();setAuthed(false)}}/>}
