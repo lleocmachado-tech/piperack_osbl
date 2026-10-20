@@ -17,7 +17,7 @@ export interface Backend{
  file(id:string):Promise<FileRow>;
  createFolder(name:string):Promise<void>;
  renameFolder(id:string,name:string):Promise<void>;
- deleteFolder(id:string):Promise<void>; // só pasta vazia
+ deleteFolder(id:string):Promise<void>; // apaga também os arquivos da pasta
  createFile(name:string,folderId:string|null,pdfName:string,pdf:Uint8Array,legend:Legend):Promise<FileRow>;
  renameFile(id:string,name:string):Promise<void>;
  moveFile(id:string,folderId:string|null):Promise<void>;
@@ -51,7 +51,12 @@ function supabase(url:string,key:string):Backend{
   async file(id){const {data,error}=await sb.from(T.files).select(FILE_COLS).eq('id',id).single();fail(error);return data as FileRow},
   async createFolder(name){fail((await sb.from(T.folders).insert({name:clean(name)})).error)},
   async renameFolder(id,name){fail((await sb.from(T.folders).update({name:clean(name)}).eq('id',id)).error)},
-  async deleteFolder(id){fail((await sb.from(T.folders).delete().eq('id',id)).error)},
+  async deleteFolder(id){ // leva os arquivos junto (marcas saem em cascata)
+   const {data,error}=await sb.from(T.files).select('id').eq('folder_id',id);fail(error);
+   const ids=(data as {id:string}[]).map(f=>f.id);
+   if(ids.length){fail((await sb.from(T.files).delete().eq('folder_id',id)).error);await bucket().remove(ids.map(i=>i+'.pdf'))}
+   fail((await sb.from(T.folders).delete().eq('id',id)).error);
+  },
   async createFile(name,folderId,pdfName,pdf,legend){
    const id=crypto.randomUUID();
    fail((await bucket().upload(id+'.pdf',pdf,{contentType:'application/pdf'})).error);
@@ -102,7 +107,11 @@ function memory():Backend{
   async file(id){const f=files.find(x=>x.id===id);if(!f)throw Error('Arquivo não encontrado.');return f},
   async createFolder(name){folders.push({id:crypto.randomUUID(),name:clean(name)})},
   async renameFolder(id,name){folders=folders.map(f=>f.id===id?{...f,name:clean(name)}:f)},
-  async deleteFolder(id){if(files.some(f=>f.folder_id===id))throw Error('A pasta não está vazia.');folders=folders.filter(f=>f.id!==id)},
+  async deleteFolder(id){
+   const gone=new Set(files.filter(f=>f.folder_id===id).map(f=>f.id));
+   files=files.filter(f=>!gone.has(f.id));marks=marks.filter(m=>!gone.has(m.file_id));gone.forEach(i=>pdfs.delete(i));
+   folders=folders.filter(f=>f.id!==id);
+  },
   async createFile(name,folderId,pdfName,pdf,legend){
    const f:FileRow={id:crypto.randomUUID(),name:clean(name),folder_id:folderId,pdf_name:pdfName,legend};
    files.push(f);pdfs.set(f.id,pdf);return f;

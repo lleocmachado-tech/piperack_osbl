@@ -17,6 +17,11 @@ export default function Library({folderId,onOpen,onFolder,onSignOut}:{folderId:s
  const files=data.files.filter(f=>f.folder_id===folderId);
  const ask=(label:string,def='')=>(window.prompt(label,def)||'').trim();
 
+ const dropFolder=(f:Folder,n:number)=>{
+  const what=n?`a pasta "${f.name}" e os ${n} arquivo(s) dentro dela, com todas as marcas`:`a pasta "${f.name}"`;
+  if(confirm(`Excluir ${what}? Não dá para desfazer.`))void run(()=>backend.deleteFolder(f.id).then(()=>{if(folderId===f.id)onFolder(null)}));
+ };
+
  async function create(e:React.FormEvent){
   e.preventDefault();if(!form.pdf)return;setBusy(true);
   try{
@@ -40,10 +45,11 @@ export default function Library({folderId,onOpen,onFolder,onSignOut}:{folderId:s
    </div>
    <nav className="crumbs"><button onClick={()=>onFolder(null)} disabled={!folderId}>Todos os arquivos</button>{folder&&<> / <b>{folder.name}</b>
     <button onClick={()=>{const n=ask('Novo nome da pasta',folder.name);if(n)void run(()=>backend.renameFolder(folder.id,n))}}>Renomear</button>
-    <button disabled={!!files.length} title={files.length?'Esvazie a pasta para excluir':''} onClick={()=>{if(confirm(`Excluir a pasta "${folder.name}"?`))void run(()=>backend.deleteFolder(folder.id).then(()=>onFolder(null)))}}>Excluir pasta</button></>}</nav>
-   {!folderId&&data.folders.map(f=><div className="item" key={f.id}>
-    <button className="name" onClick={()=>onFolder(f.id)}>📁 {f.name} <small>({data.files.filter(x=>x.folder_id===f.id).length})</small></button>
-   </div>)}
+    <button onClick={()=>dropFolder(folder,files.length)}>Excluir pasta</button></>}</nav>
+   {!folderId&&data.folders.map(f=>{const n=data.files.filter(x=>x.folder_id===f.id).length;return <div className="item" key={f.id}>
+    <button className="name" onClick={()=>onFolder(f.id)}>📁 {f.name} <small>({n})</small></button>
+    <button onClick={()=>dropFolder(f,n)}>Excluir</button>
+   </div>})}
    {files.map(f=><div className="item" key={f.id}>
     <button className="name" onClick={()=>onOpen(f.id)}>📄 {f.name}</button>
     <select aria-label="Pasta" value={f.folder_id||''} onChange={e=>void run(()=>backend.moveFile(f.id,e.target.value||null))}><option value="">Sem pasta</option>{data.folders.map(x=><option key={x.id} value={x.id}>{x.name}</option>)}</select>
